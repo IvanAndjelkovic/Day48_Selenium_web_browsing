@@ -11,9 +11,33 @@ driver = webdriver.Chrome(options=chrome_options)
 
 
 
-driver.get("https://www.amazon.de/Lenovo-Tablet-Display-MediaTek-Android/dp/B0DF2G9HK7/ref=zg_bs_g_429874031_d_sccl_1/262-0067990-5553324?th=1")
+driver.get("https://www.python.org")
 
-price_eur = driver.find_element(By.CLASS_NAME,value="a-price-whole")
-price_cent = driver.find_element(By.CLASS_NAME,value="a-price-fraction")
-print(f"The price is {price_eur.text}.{price_cent.text}")
+# price_eur = driver.find_element(By.CLASS_NAME,value="a-price-whole")
+# price_cent = driver.find_element(By.CLASS_NAME,value="a-price-fraction")
+# print(f"The price is {price_eur.text}.{price_cent.text}")
+
+# search_bar =  driver.find_element(By.NAME, value="q")
+# print(search_bar.get_attribute("placeholder"))
+# button = driver.find_element(By.ID,value="submit")
+# print(button.size)
+
+
+# #CSS  Selector
+# documentation_link = driver.find_element(By.CSS_SELECTOR, ".documentation-widget a")
+# print(documentation_link.text)
+
+#XPath
+
+
+bug_link = driver.find_element(By.XPATH, value='//*[@id="site-map"]/div[2]/div/ul/li[3]/a')
+
+
+print(bug_link.text)
+
+# driver.find_elements(By.CLASS_NAME,value="example")
+
+
+
+
 driver.quit()
