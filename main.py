@@ -1,10 +1,13 @@
 from selenium import webdriver
 
 # Option 1: Let Selenium locate driver automatically (Selenium 4.6+)
-driver = webdriver.Chrome()
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option("detach", True)
 
-# # Option 2: Specify path explicitly if needed
-# driver = webdriver.Chrome(executable_path='C:/path/to/chromedriver.exe')
 
-driver.get("https://www.amazon.com")
+driver = webdriver.Chrome(options=chrome_options)
+
+
+
+driver.get("https://www.amazon.de")
 driver.close()
