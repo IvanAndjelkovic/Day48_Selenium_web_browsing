@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By  
+from datetime import datetime
 
 # Option 1: Let Selenium locate driver automatically (Selenium 4.6+)
 chrome_options = webdriver.ChromeOptions()
@@ -37,12 +38,23 @@ driver.get("https://www.python.org")
 
 # driver.find_elements(By.CLASS_NAME,value="example")
 
+event_dict ={}
 dates  = driver.find_elements(By.XPATH, value =  '//*[@id="content"]/div/section/div[2]/div[2]/div/ul/li')
-for date in dates:
-    date_show = date.find_element(By.CSS_SELECTOR, value =  "time")
-    print(date_show.get_attribute("datetime"))
-    event  = dates.text
-    print(event)
+for index, date in enumerate(dates):
+    date_event_find= date.find_element(By.CSS_SELECTOR, value =  "time")
+    name_event_find  = date.find_element(By.CSS_SELECTOR, value =  "a")
+    full_date_event =   date_event_find.get_attribute("datetime")
+    date_event = datetime.strptime(full_date_event, "%Y-%m-%dT%H:%M:%S%z").date()
+    name_event=  name_event_find.text
+    event_dict[index] = {
+        "time" :  str(date_event),
+        "name" : name_event
+    }
+
+
+print(event_dict)
+   
+
 
 
 
