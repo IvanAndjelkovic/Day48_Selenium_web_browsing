@@ -39,8 +39,10 @@ driver.get("https://www.python.org")
 
 dates  = driver.find_elements(By.XPATH, value =  '//*[@id="content"]/div/section/div[2]/div[2]/div/ul/li')
 for date in dates:
-    date_show = date.find_element(By.CSS_SELECTOR, value =  '#content > div > section > div.list-widgets.row > div.medium-widget.event-widget.last > div > ul > li:nth-child(4) > time')
-    print(date_show.datetime)
+    date_show = date.find_element(By.CSS_SELECTOR, value =  "time")
+    print(date_show.get_attribute("datetime"))
+    event  = dates.text
+    print(event)
 
 
 
