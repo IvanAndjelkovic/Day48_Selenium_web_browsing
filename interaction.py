@@ -16,12 +16,23 @@ chrome_options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=chrome_options)
 
 
-driver.get("https://en.wikipedia.org/wiki/Main_Page")
+# driver.get("https://en.wikipedia.org/wiki/Main_Page")
+driver.get("https://secure-retreat-92358.herokuapp.com/")
 
+f_name = driver.find_element(By.NAME,  value  = "fName")
+f_name.send_keys("Ivan")
+l_name =  driver.find_element(By.NAME,  value  = "lName")
+l_name.send_keys("Andelkovic")
+l_name =  driver.find_element(By.NAME,  value  = "email")
+l_name.send_keys("viketbre@gmail.com")
+
+button =  driver.find_element(By.CSS_SELECTOR, value =  "button")
+
+button.click()
 
 #  Find  element  by  Link Text
 
-all_portals  = driver.find_element(By.LINK_TEXT,  value  =  "Content portals")
+# all_portals  = driver.find_element(By.LINK_TEXT,  value  =  "Content portals")
 # all_portals.click()
 
 # tag  =driver.find_element(By.XPATH,   value = '//*[@id="articlecount"]/ul/li[2]/a[1]')
@@ -36,21 +47,21 @@ all_portals  = driver.find_element(By.LINK_TEXT,  value  =  "Content portals")
 # text  = search_box.get_attribute("text")
 # print(text)
 
-try:
-    # Wait up to 10 seconds for element to be clickable
-    wait = WebDriverWait(driver, 10)
-    search = wait.until(
-        EC.element_to_be_clickable((By.ID, "searchInput"))
-    )
+# try:
+#     # Wait up to 10 seconds for element to be clickable
+#     wait = WebDriverWait(driver, 10)
+#     search = wait.until(
+#         EC.element_to_be_clickable((By.ID, "searchInput"))
+#     )
     
-    # Interact with the element
-    search.click()  # Focus the element first
-    search.clear()  # Clear any existing text
-    search.send_keys("Python")
-    search.send_keys(Keys.RETURN)
+#     # Interact with the element
+#     search.click()  # Focus the element first
+#     search.clear()  # Clear any existing text
+#     search.send_keys("Python")
+#     search.send_keys(Keys.RETURN)
     
-except Exception as e:
-    print(f"An error occurred: {e}")
+# except Exception as e:
+#     print(f"An error occurred: {e}")
 
 
 
@@ -67,4 +78,4 @@ except Exception as e:
 # # Send Enter key to submit the search
 # search_box.send_keys(Keys.ENTER)
 
- # driver.quit()
+# driver.quit()
