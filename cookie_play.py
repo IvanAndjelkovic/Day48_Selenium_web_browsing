@@ -13,6 +13,7 @@ chrome_options.add_experimental_option("detach", True)
 
 
 # Create and  configure  the Chrome  webrdiver
+global  driver
 
 driver = webdriver.Chrome(options=chrome_options)
 
@@ -26,15 +27,16 @@ eng_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="langSele
 eng_button.click()
 
 
+number_of_minutes  = 10
 
-
-time_check=  1
-timeout =  60*time_check
-multiplier = 2
+time_check=  8
+timeout =  60 * number_of_minutes
+multiplier = 1.4
 
 timeout_start  = time.time()
 
 stop_flag = False
+
 
 def click_cookie(driver):
     while  not  stop_flag:
@@ -46,10 +48,10 @@ def click_cookie(driver):
         #print actual  cookies
         actual_cookies = driver.find_element(By.ID, "cookies")
         cookies_count_full = actual_cookies.text
-        cookies_count = int(cookies_count_full.split()[0])
+        cookies_count = int(cookies_count_full.split()[0].replace(",",""))
         
         # return cookies_count
-        print(f"Cookies: {cookies_count}")
+        # print(f"Cookies: {cookies_count}")
         # Add a small sleep to prevent CPU overuse
         time.sleep(0.01)
 
@@ -66,8 +68,9 @@ def  pick_the_element(driver):
         else  :
             element_number  = len(store_items)-1
             price_element  = store_items[element_number].find_element(By.CLASS_NAME, value  = "price")
-            price = int(price_element.text)
-            print(price)
+            price = int(price_element.text.replace(",",""))
+            # print(price)
+            print(stop_flag)
 
             if  price * multiplier < cookies_count:
                             store_items[element_number].click()
@@ -97,7 +100,22 @@ def  pick_the_element(driver):
 def stopper():
     global stop_flag
     time.sleep(timeout)
+
     stop_flag = True
+
+    time.sleep(5)
+
+    cookies_per_second_element = driver.find_element(By.ID, "cookiesPerSecond")
+    cookies_per_second=cookies_per_second_element.text.split()#[-1]
+
+
+    print(f"cookies/second: {cookies_per_second}")
+
+
+
+    time.sleep(5)
+    driver.quit()
+
 
 
 
