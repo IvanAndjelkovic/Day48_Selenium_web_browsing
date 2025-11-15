@@ -27,7 +27,7 @@ eng_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="langSele
 eng_button.click()
 
 
-number_of_minutes  = 10
+number_of_minutes  = 5
 
 time_check=  8
 timeout =  60 * number_of_minutes
@@ -105,7 +105,10 @@ def stopper():
 
     time.sleep(5)
 
-    cookies_per_second_element = driver.find_element(By.ID, "cookiesPerSecond")
+    wait = WebDriverWait(driver, 5)
+    cookies_per_second_element = wait.until(
+                EC.presence_of_element_located((By.ID, "cookiesPerSecond"))
+            )
     cookies_per_second=cookies_per_second_element.text.split()#[-1]
 
 
