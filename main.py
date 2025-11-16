@@ -1,62 +1,154 @@
+import time 
+import threading
 from selenium import webdriver
 from selenium.webdriver.common.by import By  
-from datetime import datetime
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-# Option 1: Let Selenium locate driver automatically (Selenium 4.6+)
+
+# Keep  Chrome browser open after  program finishes
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
 
 
+# Create and  configure  the Chrome  webrdiver
+global  driver
+
 driver = webdriver.Chrome(options=chrome_options)
 
+# driver.get
+driver.get("https://ozh.github.io/cookieclicker/")
+
+# Click the english button
+
+wait = WebDriverWait(driver, 5)
+eng_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="langSelect-EN"]')))
+eng_button.click()
+
+
+number_of_minutes  = 2
+
+time_check=  6
+timeout =  60 * number_of_minutes
+multiplier = 2
+
+timeout_start  = time.time()
+
+stop_flag = False
 
 
 
-driver.get("https://www.python.org")
+def stop():
+    time.sleep(3)
 
-# price_eur = driver.find_element(By.CLASS_NAME,value="a-price-whole")
-# price_cent = driver.find_element(By.CLASS_NAME,value="a-price-fraction")
-# print(f"The price is {price_eur.text}.{price_cent.text}")
-
-# search_bar =  driver.find_element(By.NAME, value="q")
-# print(search_bar.get_attribute("placeholder"))
-# button = driver.find_element(By.ID,value="submit")
-# print(button.size)
-
-
-# #CSS  Selector
-# documentation_link = driver.find_element(By.CSS_SELECTOR, ".documentation-widget a")
-# print(documentation_link.text)
-
-#XPath
+    wait = WebDriverWait(driver, 5)
+    cookies_per_second_element = wait.until(
+                EC.presence_of_element_located((By.ID, "cookiesPerSecond"))
+            )
+    cookies_per_second_list=cookies_per_second_element.text
+    # cookies_per_second = cookies_per_second_list[-1]
 
 
-# bug_link = driver.find_element(By.XPATH, value='//*[@id="site-map"]/div[2]/div/ul/li[3]/a')
+    print(f"cookies/second: {cookies_per_second_list}")
 
 
-# print(bug_link.text)
 
-# driver.find_elements(By.CLASS_NAME,value="example")
-
-event_dict ={}
-dates  = driver.find_elements(By.XPATH, value =  '//*[@id="content"]/div/section/div[2]/div[2]/div/ul/li')
-for index, date in enumerate(dates):
-    date_event_find= date.find_element(By.CSS_SELECTOR, value =  "time")
-    name_event_find  = date.find_element(By.CSS_SELECTOR, value =  "a")
-    full_date_event =   date_event_find.get_attribute("datetime")
-    date_event = datetime.strptime(full_date_event, "%Y-%m-%dT%H:%M:%S%z").date()
-    name_event=  name_event_find.text
-    event_dict[index] = {
-        "time" :  str(date_event),
-        "name" : name_event
-    }
+    time.sleep(3)
+    driver.quit()
+      
+      
 
 
-print(event_dict)
+def click_cookie():
+    while  not  stop_flag:
+        global cookies_count
+
+        wait = WebDriverWait(driver, 5)
+        cookie_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bigCookie"]')))
+        cookie_button.click()
+        #print actual  cookies
+        actual_cookies = driver.find_element(By.ID, "cookies")
+        cookies_count_full = actual_cookies.text
+        cookies_count = int(cookies_count_full.split()[0].replace(",",""))
+        
+        # return cookies_count
+        # print(f"Cookies: {cookies_count}")
+        # Add a small sleep to prevent CPU overuse
+        time.sleep(0.01)
+
+
+def  pick_the_element():
+    while  not  stop_flag:
+        wait = WebDriverWait(driver, 5)
+
+        store_items=driver.find_elements(By.CSS_SELECTOR ,value  = ".product.unlocked.enabled")
+        if len(store_items)==0:
+            pass
+
+
+        else  :
+            element_number  = len(store_items)-1
+            price_element  = store_items[element_number].find_element(By.CLASS_NAME, value  = "price")
+            price = int(price_element.text.replace(",",""))
+            # print(price)
+            print(stop_flag)
+
+            if  price * multiplier < cookies_count:
+                            store_items[element_number].click()
+                    
+
+            time.sleep(time_check)
+
    
+        # if len(store_items)>0:
+        #     if len(store_items)==1:
+
+        #         price_element  = store_items[0].find_element(By.CLASS_NAME, value  = "price")
+        #         price = int(price_element.text)
+        #         print(price)
+        #         if  price * multiplier < cookies_count:
+        #             price_element.click()
+                
+        #     else:
+        #         print(len(store_items))
+
+    
+        
+
+    
+
+
+def stopper():
+    global stop_flag
+    time.sleep(timeout)
+
+    stop_flag = True
+    stop()
+
+ 
 
 
 
 
 
-driver.quit()
+threading.Thread(target=click_cookie).start()
+threading.Thread(target=pick_the_element).start()
+threading.Thread(target=stopper, daemon=True).start()
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+

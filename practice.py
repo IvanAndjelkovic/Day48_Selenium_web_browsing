@@ -1,0 +1,62 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By  
+from datetime import datetime
+
+# Option 1: Let Selenium locate driver automatically (Selenium 4.6+)
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option("detach", True)
+
+
+driver = webdriver.Chrome(options=chrome_options)
+
+
+
+
+driver.get("https://www.python.org")
+
+# price_eur = driver.find_element(By.CLASS_NAME,value="a-price-whole")
+# price_cent = driver.find_element(By.CLASS_NAME,value="a-price-fraction")
+# print(f"The price is {price_eur.text}.{price_cent.text}")
+
+# search_bar =  driver.find_element(By.NAME, value="q")
+# print(search_bar.get_attribute("placeholder"))
+# button = driver.find_element(By.ID,value="submit")
+# print(button.size)
+
+
+# #CSS  Selector
+# documentation_link = driver.find_element(By.CSS_SELECTOR, ".documentation-widget a")
+# print(documentation_link.text)
+
+#XPath
+
+
+# bug_link = driver.find_element(By.XPATH, value='//*[@id="site-map"]/div[2]/div/ul/li[3]/a')
+
+
+# print(bug_link.text)
+
+# driver.find_elements(By.CLASS_NAME,value="example")
+
+event_dict ={}
+dates  = driver.find_elements(By.XPATH, value =  '//*[@id="content"]/div/section/div[2]/div[2]/div/ul/li')
+for index, date in enumerate(dates):
+    date_event_find= date.find_element(By.CSS_SELECTOR, value =  "time")
+    name_event_find  = date.find_element(By.CSS_SELECTOR, value =  "a")
+    full_date_event =   date_event_find.get_attribute("datetime")
+    date_event = datetime.strptime(full_date_event, "%Y-%m-%dT%H:%M:%S%z").date()
+    name_event=  name_event_find.text
+    event_dict[index] = {
+        "time" :  str(date_event),
+        "name" : name_event
+    }
+
+
+print(event_dict)
+   
+
+
+
+
+
+driver.quit()
