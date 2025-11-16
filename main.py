@@ -29,9 +29,9 @@ eng_button.click()
 
 number_of_minutes  = 2
 
-time_check=  6
+time_check=  5
 timeout =  60 * number_of_minutes
-multiplier = 2
+multiplier = 1
 
 timeout_start  = time.time()
 
@@ -41,21 +41,28 @@ stop_flag = False
 
 def stop():
     time.sleep(3)
-
-    wait = WebDriverWait(driver, 5)
-    cookies_per_second_element = wait.until(
-                EC.presence_of_element_located((By.ID, "cookiesPerSecond"))
-            )
-    cookies_per_second_list=cookies_per_second_element.text
-    # cookies_per_second = cookies_per_second_list[-1]
+    try:
 
 
-    print(f"cookies/second: {cookies_per_second_list}")
+        wait = WebDriverWait(driver, 5)
+        cookies_per_second_element = wait.until(
+                    EC.presence_of_element_located((By.ID, "cookiesPerSecond"))
+                )
+        cookies_per_second_list=cookies_per_second_element.text
+        # cookies_per_second = cookies_per_second_list[-1]
 
 
+        print(f"cookies/: {cookies_per_second_list}")
+
+    except:
+         print("Can not  find the cookies/second")
 
     time.sleep(3)
     driver.quit()
+
+
+
+
       
       
 
@@ -92,7 +99,7 @@ def  pick_the_element():
             price_element  = store_items[element_number].find_element(By.CLASS_NAME, value  = "price")
             price = int(price_element.text.replace(",",""))
             # print(price)
-            print(stop_flag)
+            # print(stop_flag)
 
             if  price * multiplier < cookies_count:
                             store_items[element_number].click()
@@ -125,6 +132,7 @@ def stopper():
 
     stop_flag = True
     stop()
+
 
  
 
